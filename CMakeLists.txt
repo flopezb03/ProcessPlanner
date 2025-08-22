@@ -7,4 +7,8 @@ add_executable(ProcessPlanner src/main.cpp
         src/process.h
         src/fcfs_planner.cpp
         src/fcfs_planner.h
-        src/process.cpp)
+        src/process.cpp
+        src/sjf_coop_planner.cpp
+        src/sjf_coop_planner.h
+        src/planner.h
+        src/planner.cpp)

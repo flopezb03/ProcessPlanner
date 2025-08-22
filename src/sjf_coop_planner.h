@@ -1,5 +1,5 @@
-#ifndef FCFS_PLANNER_H
-#define FCFS_PLANNER_H
+#ifndef SJF_COOP_PLANNER_H
+#define SJF_COOP_PLANNER_H
 
 #include <mutex>
 #include <queue>
@@ -9,8 +9,8 @@
 
 using namespace std::chrono;
 
-class FcfsPlanner : public Planner {
-    std::queue<Process> q_{};
+class SjfCoopPlanner : public Planner {
+    std::priority_queue<Process> q_{};
 
     public:
     void execute_processes() override;
@@ -19,4 +19,4 @@ class FcfsPlanner : public Planner {
 
 
 
-#endif //FCFS_PLANNER_H
+#endif //SJF_COOP_PLANNER_H

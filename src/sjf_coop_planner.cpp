@@ -1,15 +1,15 @@
-#include "fcfs_planner.h"
+#include "sjf_coop_planner.h"
 
 #include <chrono>
 #include <thread>
 
-void FcfsPlanner::insert_process(const Process& p) {
+void SjfCoopPlanner::insert_process(const Process& p) {
     q_mutex_.lock();
     q_.push(p);
     q_mutex_.unlock();
 }
 
-void FcfsPlanner::execute_processes() {
+void SjfCoopPlanner::execute_processes() {
     using namespace std::chrono;
 
     std::this_thread::sleep_for(milliseconds{100});
@@ -18,7 +18,7 @@ void FcfsPlanner::execute_processes() {
 
     while (!q_.empty()) {
         q_mutex_.lock();
-        Process p = q_.front();
+        Process p = q_.top();
         q_.pop();
         q_mutex_.unlock();
 

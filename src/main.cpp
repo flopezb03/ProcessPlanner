@@ -3,12 +3,14 @@
 #include <iostream>
 #include <regex>
 
-#include "fcfs_planner.h"
 #include "process.h"
+#include "planner.h"
+#include "fcfs_planner.h"
+#include "sjf_coop_planner.h"
 
 using namespace std;
 
-void generator(std::queue<std::pair<Process,int>>& q, FcfsPlanner& planner) {
+void generator(std::queue<std::pair<Process,int>>& q, Planner& planner) {
     int time = 0;
     while (!q.empty()) {
         auto pair = q.front();
@@ -51,9 +53,11 @@ int main() {
     // Create threads
 
     FcfsPlanner planner;
+    //SjfCoopPlanner planner;
 
     std::thread t_gen(generator, std::ref(processes_queue), std::ref(planner));
     std::thread t_planner(&FcfsPlanner::execute_processes, &planner);
+    //planner.execute_processes();
 
     // Join threads
 
