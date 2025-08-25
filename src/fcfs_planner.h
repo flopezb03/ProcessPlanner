@@ -10,6 +10,7 @@
 using namespace std::chrono;
 
 class FcfsPlanner : public Planner {
+    protected:
     std::queue<Process> q_{};
 
     public:

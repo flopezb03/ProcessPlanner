@@ -10,6 +10,7 @@
 using namespace std::chrono;
 
 class SjfCoopPlanner : public Planner {
+    protected:
     std::priority_queue<Process> q_{};
 
     public:

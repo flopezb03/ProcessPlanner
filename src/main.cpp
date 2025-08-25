@@ -7,6 +7,7 @@
 #include "planner.h"
 #include "fcfs_planner.h"
 #include "sjf_coop_planner.h"
+#include "sjf_apr_planner.h"
 
 using namespace std;
 
@@ -52,11 +53,12 @@ int main() {
 
     // Create threads
 
-    FcfsPlanner planner;
+    //FcfsPlanner planner;
     //SjfCoopPlanner planner;
+    SjfAprPlanner planner;
 
     std::thread t_gen(generator, std::ref(processes_queue), std::ref(planner));
-    std::thread t_planner(&FcfsPlanner::execute_processes, &planner);
+    std::thread t_planner(&Planner::execute_processes, &planner);
     //planner.execute_processes();
 
     // Join threads
