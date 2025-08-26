@@ -24,7 +24,7 @@ void SjfCoopPlanner::execute_processes() {
 
         print(steady_clock::now(),p.name_);
 
-        p.execute();
+        std::this_thread::sleep_for(std::chrono::seconds{p.duration_});
     }
 
     print(steady_clock::now(),"FIN");
