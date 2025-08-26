@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include <chrono>
 
 #include "process.h"
 #include "planner.h"
@@ -17,7 +18,7 @@ void generator(std::queue<std::pair<Process,int>>& q, Planner& planner) {
         auto pair = q.front();
         q.pop();
         time = pair.second - time;
-        std::this_thread::sleep_for(seconds{time});
+        std::this_thread::sleep_for(chrono::seconds(time));
         planner.insert_process(pair.first);
     }
 }
@@ -47,7 +48,7 @@ int main() {
         if (!(iss >> p_name >> p_duration >> p_start)) {
             cerr << "Invalid line: " << line_index << endl;
         }
-        processes_queue.push({Process(p_name,p_duration),p_start});
+        processes_queue.push({Process(p_name,chrono::milliseconds(p_duration*1000)),p_start});
         line_index++;
     }
 
@@ -58,13 +59,13 @@ int main() {
     SjfAprPlanner planner;
 
     std::thread t_gen(generator, std::ref(processes_queue), std::ref(planner));
-    std::thread t_planner(&Planner::execute_processes, &planner);
-    //planner.execute_processes();
+    //std::thread t_planner(&Planner::execute_processes, &planner);
+    planner.execute_processes();
 
     // Join threads
 
     t_gen.join();
-    t_planner.join();
+    //t_planner.join();
 
     return 0;
 }

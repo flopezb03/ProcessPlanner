@@ -1,16 +1,10 @@
-//
-// Created by ferloz97 on 25/08/25.
-//
-
 #include "sjf_apr_planner.h"
 
-#include <iostream>
 #include <thread>
 
+using namespace std::chrono;
 
 void SjfAprPlanner::execute_processes() {
-    using namespace std::chrono;
-
     std::this_thread::sleep_for(milliseconds{100});
 
     start_time_ = steady_clock::now();
@@ -25,8 +19,8 @@ void SjfAprPlanner::execute_processes() {
 
         std::unique_lock lck{cv_mutex_};
         time_point<steady_clock> prev = steady_clock::now();
-        if (cv_.wait_for(lck,seconds(p.duration_)) != std::cv_status::timeout) {
-            int p_exec_time = duration_cast<seconds>(steady_clock::now() - prev).count();
+        if (cv_.wait_for(lck,p.duration_) != std::cv_status::timeout) {
+            milliseconds p_exec_time = duration_cast<milliseconds>(steady_clock::now() - prev);
             p.duration_ -= p_exec_time;
             q_mutex_.lock();
             q_.push(p);

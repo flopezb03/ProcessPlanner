@@ -6,15 +6,12 @@
 
 #include "process.h"
 
-using namespace std::chrono;
-
-
 
 class Planner {
     protected:
     std::mutex q_mutex_{};
-    time_point<steady_clock> start_time_{};
-    void print(const time_point<steady_clock>& end, const std::string& name) const;
+    std::chrono::time_point<std::chrono::steady_clock> start_time_{};
+    void print(const std::chrono::time_point<std::chrono::steady_clock>& end, const std::string& name) const;
 
     public:
     virtual ~Planner() = default;

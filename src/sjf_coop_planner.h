@@ -1,13 +1,10 @@
 #ifndef SJF_COOP_PLANNER_H
 #define SJF_COOP_PLANNER_H
 
-#include <mutex>
 #include <queue>
 
 #include "planner.h"
 #include "process.h"
-
-using namespace std::chrono;
 
 class SjfCoopPlanner : public Planner {
     protected:

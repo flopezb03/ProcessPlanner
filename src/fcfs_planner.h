@@ -1,13 +1,10 @@
 #ifndef FCFS_PLANNER_H
 #define FCFS_PLANNER_H
 
-#include <mutex>
 #include <queue>
 
 #include "planner.h"
 #include "process.h"
-
-using namespace std::chrono;
 
 class FcfsPlanner : public Planner {
     protected:

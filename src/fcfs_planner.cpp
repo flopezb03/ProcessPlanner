@@ -3,6 +3,8 @@
 #include <chrono>
 #include <thread>
 
+using namespace std::chrono;
+
 void FcfsPlanner::insert_process(const Process& p) {
     q_mutex_.lock();
     q_.push(p);
@@ -10,8 +12,6 @@ void FcfsPlanner::insert_process(const Process& p) {
 }
 
 void FcfsPlanner::execute_processes() {
-    using namespace std::chrono;
-
     std::this_thread::sleep_for(milliseconds{100});
 
     start_time_ = steady_clock::now();
@@ -24,7 +24,7 @@ void FcfsPlanner::execute_processes() {
 
         print(steady_clock::now(),p.name_);
 
-        std::this_thread::sleep_for(std::chrono::seconds{p.duration_});
+        std::this_thread::sleep_for(p.duration_);
     }
 
     print(steady_clock::now(),"FIN");

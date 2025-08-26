@@ -3,7 +3,11 @@
 #include <chrono>
 #include <iostream>
 
+using std::cout;
+using std::endl;
+using namespace std::chrono;
+
 void Planner::print(const time_point<steady_clock>& end, const std::string& name) const{
-    auto duration = duration_cast<seconds>(end - start_time_).count();
-    std::cout << duration << " s  - " << name << std::endl;
+    long duration = duration_cast<milliseconds>(end - start_time_).count();
+    cout << duration << " ms  - " << name << endl;
 }
