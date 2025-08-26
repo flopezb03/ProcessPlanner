@@ -10,6 +10,7 @@ class SjfAprPlanner : public SjfCoopPlanner {
     protected:
     std::condition_variable cv_;
     std::mutex cv_mutex_;
+
     public:
     void execute_processes() override;
     void insert_process(const Process& p) override;
