@@ -7,7 +7,7 @@ using namespace std::chrono;
 
 void FcfsPlanner::execute_processes() {
     //  Init time
-    std::this_thread::sleep_for(milliseconds{100}); // Give time to the generator thread to push process in the queue
+    std::this_thread::sleep_for(nanoseconds{1}); // Give time to the generator thread to push process in the queue
     start_time_ = steady_clock::now();
 
     while (!q_.empty()) {

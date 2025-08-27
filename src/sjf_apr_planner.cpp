@@ -6,7 +6,7 @@ using namespace std::chrono;
 
 void SjfAprPlanner::execute_processes() {
     //  Init time
-    std::this_thread::sleep_for(milliseconds{1}); // Give time to the generator thread to push process in the queue
+    std::this_thread::sleep_for(nanoseconds{1}); // Give time to the generator thread to push process in the queue
     start_time_ = steady_clock::now();
 
     while (!q_.empty()) {
@@ -16,7 +16,10 @@ void SjfAprPlanner::execute_processes() {
         q_.pop();
         q_mutex_.unlock();
 
-        print_exec_start(steady_clock::now(),p.name_);
+        //  Dont print when new processes have less priority
+        if (last_process_ != p.name_)
+            print_exec_start(steady_clock::now(),p.name_);
+        last_process_ = p.name_;
 
         std::unique_lock lck{cv_mutex_};
         time_point<steady_clock> prev = steady_clock::now();
