@@ -9,6 +9,7 @@
 #include "fcfs_planner.h"
 #include "sjf_coop_planner.h"
 #include "sjf_apr_planner.h"
+#include "round_robin_planner.h"
 
 using namespace std;
 
@@ -34,6 +35,8 @@ bool read_input(unique_ptr<Planner>& planner, std::queue<std::pair<Process,int>>
         planner = make_unique<SjfCoopPlanner>();
     else if (line == "sjf_apr")
         planner = make_unique<SjfAprPlanner>();
+    else if (line == "rr")
+        planner = make_unique<RoundRobinPlanner>(2000);
     else {
         cerr << "Unknown planner type: " << line << endl;
         return false;

@@ -12,4 +12,6 @@ add_executable(ProcessPlanner src/main.cpp
         src/planner.h
         src/planner.cpp
         src/sjf_apr_planner.cpp
-        src/sjf_apr_planner.h)
+        src/sjf_apr_planner.h
+        src/round_robin_planner.cpp
+        src/round_robin_planner.h)
