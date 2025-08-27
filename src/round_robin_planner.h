@@ -10,9 +10,8 @@ class RoundRobinPlanner : public FcfsPlanner {
     protected:
     std::chrono::milliseconds quantum_;
     std::condition_variable p_duration_cv;
-    std::mutex process_duration_cv_mutex_;
     std::condition_variable q_duration_cv_;
-    std::mutex quantum_duration_cv_mutex_;
+    std::mutex quantum_mutex_;
     bool q_clock_active_;
 
     public:
