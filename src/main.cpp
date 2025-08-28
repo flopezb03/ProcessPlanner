@@ -14,18 +14,15 @@
 
 using namespace std;
 
-bool read_input(unique_ptr<Planner>& planner, std::queue<std::pair<Process,int>>& q) {
+int read_input(const string& ifile_path, unique_ptr<Planner>& planner, std::queue<std::pair<Process,int>>& q) {
     ifstream processes_file;
     string line;
 
     // File opening
-    try {
-        processes_file.open("../src/processes_input.txt");
-        if (!processes_file.is_open())
-            throw runtime_error("Could not open processes_input.txt");
-    }catch (exception& e) {
-        cerr << e.what() << endl;
-        return false;
+    processes_file.open(ifile_path);
+    if (!processes_file.is_open()) {
+        cerr << "Could not open processes_input.txt" << endl;
+        return 2;
     }
 
     // First line => type of Process Planner to use
@@ -40,7 +37,7 @@ bool read_input(unique_ptr<Planner>& planner, std::queue<std::pair<Process,int>>
         planner = make_unique<RoundRobinPlanner>(1000*stoi(line.substr(3)));
     else {
         cerr << "Unknown planner type: " << line << endl;
-        return false;
+        return 3;
     }
 
     // Read processes times and start times
@@ -57,7 +54,7 @@ bool read_input(unique_ptr<Planner>& planner, std::queue<std::pair<Process,int>>
         q.push({Process(p_name,chrono::milliseconds(p_duration*1000)),p_start});
         line_index++;
     }
-    return true;
+    return 0;
 }
 
 void generator(Planner& planner, std::queue<std::pair<Process,int>>& q) {
@@ -71,17 +68,27 @@ void generator(Planner& planner, std::queue<std::pair<Process,int>>& q) {
     }
 }
 
-int main() {
+int main(int argc, char** argv) {
     unique_ptr<Planner> planner;
     std::queue<std::pair<Process,int>> processes_queue;
 
+    string ifile_path = "../src/processes_input.txt";
+    if (argc > 2) {
+        cerr << "Usage: " << argv[0] << " wrong arguments" << endl;
+        return 1;
+    }
+    if (argc == 2)
+        ifile_path = argv[1];
+
+
     //  Read input file
-    read_input(planner,processes_queue);
+    int read_out = read_input(ifile_path, planner,processes_queue);
+    if (read_out != 0)
+        return read_out;
 
     // Create threads
     thread t_gen(generator, ref(*planner), ref(processes_queue));
     thread t_planner(&Planner::execute_processes, ref(*planner));
-    //planner->execute_processes();
 
     // Join threads
     t_gen.join();
