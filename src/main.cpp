@@ -3,6 +3,7 @@
 #include <iostream>
 #include <regex>
 #include <chrono>
+#include <string>
 
 #include "process.h"
 #include "planner.h"
@@ -35,8 +36,8 @@ bool read_input(unique_ptr<Planner>& planner, std::queue<std::pair<Process,int>>
         planner = make_unique<SjfCoopPlanner>();
     else if (line == "sjf_apr")
         planner = make_unique<SjfAprPlanner>();
-    else if (line == "rr")
-        planner = make_unique<RoundRobinPlanner>(2000);
+    else if (line.substr(0,2) == "rr")
+        planner = make_unique<RoundRobinPlanner>(1000*stoi(line.substr(3)));
     else {
         cerr << "Unknown planner type: " << line << endl;
         return false;
