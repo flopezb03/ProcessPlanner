@@ -4,7 +4,7 @@
 #include <queue>
 
 #include "planner.h"
-#include "process.h"
+#include "../process.h"
 
 class FcfsPlanner : public Planner {
     protected:

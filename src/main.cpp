@@ -6,13 +6,51 @@
 #include <string>
 
 #include "process.h"
-#include "planner.h"
-#include "fcfs_planner.h"
-#include "sjf_coop_planner.h"
-#include "sjf_apr_planner.h"
-#include "round_robin_planner.h"
+#include "planners/planner.h"
+#include "planners/fcfs_planner.h"
+#include "planners/sjf_coop_planner.h"
+#include "planners/sjf_apr_planner.h"
+#include "planners/round_robin_planner.h"
 
 using namespace std;
+
+int read_input(const string& ifile_path, unique_ptr<Planner>& planner, std::queue<std::pair<Process,int>>& q);
+void generator(Planner& planner, std::queue<std::pair<Process,int>>& q);
+
+
+
+
+int main(int argc, char** argv) {
+    unique_ptr<Planner> planner;
+    std::queue<std::pair<Process,int>> processes_queue;
+
+    string ifile_path = "../resources/processes_input.txt";
+    if (argc > 2) {
+        cerr << "Usage: " << argv[0] << " wrong arguments" << endl;
+        return 1;
+    }
+    if (argc == 2)
+        ifile_path = argv[1];
+
+
+    //  Read input file
+    int read_out = read_input(ifile_path, planner,processes_queue);
+    if (read_out != 0)
+        return read_out;
+
+    // Create threads
+    thread t_gen(generator, ref(*planner), ref(processes_queue));
+    thread t_planner(&Planner::execute_processes, ref(*planner));
+
+    // Join threads
+    t_gen.join();
+    t_planner.join();
+
+
+    return 0;
+}
+
+
 
 int read_input(const string& ifile_path, unique_ptr<Planner>& planner, std::queue<std::pair<Process,int>>& q) {
     ifstream processes_file;
@@ -66,34 +104,4 @@ void generator(Planner& planner, std::queue<std::pair<Process,int>>& q) {
         std::this_thread::sleep_for(chrono::seconds(time));
         planner.insert_process(pair.first);
     }
-}
-
-int main(int argc, char** argv) {
-    unique_ptr<Planner> planner;
-    std::queue<std::pair<Process,int>> processes_queue;
-
-    string ifile_path = "../src/processes_input.txt";
-    if (argc > 2) {
-        cerr << "Usage: " << argv[0] << " wrong arguments" << endl;
-        return 1;
-    }
-    if (argc == 2)
-        ifile_path = argv[1];
-
-
-    //  Read input file
-    int read_out = read_input(ifile_path, planner,processes_queue);
-    if (read_out != 0)
-        return read_out;
-
-    // Create threads
-    thread t_gen(generator, ref(*planner), ref(processes_queue));
-    thread t_planner(&Planner::execute_processes, ref(*planner));
-
-    // Join threads
-    t_gen.join();
-    t_planner.join();
-
-
-    return 0;
 }
